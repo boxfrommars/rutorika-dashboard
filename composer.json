@@ -19,6 +19,9 @@
         "classmap": [
             "src/migrations"
         ],
+        "files": [
+            "src/Rutorika/Dashboard/Support/helpers.php"
+        ],
         "psr-0": {
             "Rutorika\\Dashboard\\": "src/"
         }
