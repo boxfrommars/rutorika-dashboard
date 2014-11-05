@@ -55,3 +55,26 @@ if (!function_exists('add_link')) {
     }
 }
 
+
+if (!function_exists('generate_crud_routes')) {
+    function generate_crud_routes($routes, $entityDefaultNameSpace = '\\')
+    {
+        foreach ($routes as $route) {
+            $name = $route['name'];
+            $entity = camel_case($name);
+            $controller = studly_case($name) . 'Controller';
+            $prefix = array_key_exists('prefix', $route) ? $route['prefix'] : '';
+            $entityClassName = studly_case($name);
+
+            $entityNameSpace = isset($route['entityNameSpace']) ? $route['entityNameSpace'] : $entityDefaultNameSpace;
+            Route::model($entity, $entityNameSpace . "{$entityClassName}");
+
+            Route::get( "{$name}/{id}",                         ["as" => ".{$name}.view",      "uses" => "{$controller}@view"]);
+            Route::get( "{$prefix}{$name}",                     ["as" => ".{$name}.index",     "uses" => "{$controller}@index"]);
+            Route::get( "{$prefix}{$name}/create",              ["as" => ".{$name}.create",    "uses" => "{$controller}@create"]);
+            Route::post("{$name}/store",                        ["as" => ".{$name}.store",     "uses" => "{$controller}@store"]);
+            Route::post("{$name}/{id}/update",                  ["as" => ".{$name}.update",    "uses" => "{$controller}@store"]);
+            Route::get( '{$name}/{' . $entity . '}/destroy',    ["as" => ".{$name}.destroy",   "uses" => "{$controller}@destroy"]);
+        }
+    }
+}
