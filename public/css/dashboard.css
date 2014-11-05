@@ -1,0 +1,241 @@
+/*!
+ * Start Bootstrap - Simple Sidebar HTML Template (http://startbootstrap.com)
+ * Code licensed under the Apache License v2.0.
+ * For details, see http://www.apache.org/licenses/LICENSE-2.0.
+ */
+/* Move down content because we have a fixed navbar that is 50px tall */
+
+body {
+    padding-top: 50px;
+}
+
+/* Toggle Styles */
+
+#wrapper {
+    padding-left: 0;
+}
+
+#wrapper.toggled {
+    padding-left: 250px;
+}
+
+#sidebar-wrapper {
+    z-index: 1000;
+    position: fixed;
+    left: 250px;
+    width: 0;
+    height: 100%;
+    margin-left: -250px;
+    overflow-y: auto;
+
+    background-color: #f5f5f5;
+    border-right: 1px solid #eee;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+    width: 250px;
+}
+
+#page-content-wrapper {
+    width: 100%;
+    padding: 15px;
+}
+
+#wrapper.toggled #page-content-wrapper {
+    position: absolute;
+    margin-right: -250px;
+}
+
+/* Sidebar Styles */
+
+.sidebar-nav {
+    position: absolute;
+    width: 250px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sidebar-nav li a {
+    display: block;
+    padding: 10px 20px;
+}
+
+.sidebar-nav li a:hover,
+.sidebar-nav li a:active,
+.sidebar-nav li a:focus {
+    text-decoration: none;
+}
+
+.sidebar-nav > .active > a,
+.sidebar-nav > .active > a:hover,
+.sidebar-nav > .active > a:focus {
+    background-color: #e5e5e5;
+}
+.sidebar-nav a:hover,
+.sidebar-nav a:focus {
+    color: #428bca;
+}
+
+@media(min-width:768px) {
+    #wrapper {
+        padding-left: 250px;
+    }
+
+    #wrapper.toggled {
+        padding-left: 0;
+    }
+
+    #sidebar-wrapper {
+        width: 250px;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        width: 0;
+    }
+
+    #page-content-wrapper {
+        padding: 20px;
+    }
+
+    #wrapper.toggled #page-content-wrapper {
+        position: relative;
+        margin-right: 0;
+    }
+}
+
+.main .page-header {
+    margin-top: 0;
+}
+
+@media(max-width:767px) {
+    .navbar-toggle.fake {
+        margin-left: 15px;
+    }
+}
+
+.navbar-toggle.fake {
+    display: block;
+}
+
+
+/*
+ * Placeholder dashboard ideas
+ */
+
+.placeholders {
+    margin-bottom: 30px;
+    text-align: center;
+}
+.placeholders h4 {
+    margin-bottom: 0;
+}
+.placeholder {
+    margin-bottom: 20px;
+}
+.placeholder img {
+    display: inline-block;
+    border-radius: 50%;
+}
+
+/* OBJECT */
+
+.number-input {
+    width: 60px;
+}
+
+.pseudo-link {
+    border-bottom: 1px dashed #428bca;
+}
+.pseudo-link:hover,
+.pseudo-link:focus {
+    text-decoration: none;
+    border-bottom: 1px solid #2a6496;
+}
+.grid-actions {
+    text-align: right;
+    min-width: 80px;
+}
+.grid-actions a {
+    margin-left: 10px;
+}
+.panel-heading i {
+    margin-right: 8px;
+}
+.sortable-handle {
+    cursor: move;
+    width: 40px;
+    color: #ddd;
+}
+.bootstrap-growl .close {
+    margin-left: 10px;
+}
+.thumb {
+    display: inline-block;
+    width: 200px;
+    height: 160px;
+    background-position: center center;
+    background-size: cover;
+}
+.thumbnail-link {
+    position: absolute;
+    top:15px;
+    opacity: 0.6;
+    color: #ff0;
+}
+.thumbnail-link:hover {
+    opacity: 1;
+    color: #ff0;
+}
+
+.thumbnail-image-destroy {
+    right:15px;
+}
+.thumbnail-image-set-cover {
+    left: 15px;
+}
+
+.upload-container .upload-result img {
+    background-image: url(../img/background-pattern.png);
+    max-height: 200px;
+    max-width:360px;
+}
+
+.disable-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.faded {
+    color: #999;
+}
+.top-buffer {
+    margin-top:20px;
+}
+
+.equal-width-list li {
+    width: 150px;
+}
+
+.popover-handler {
+    cursor: pointer;
+}
+.current-cover {
+    background: #ff9;
+}
+.current-cover .thumbnail-image-set-cover {
+    color: #ff0;
+    opacity: 1;
+}
+.nav-divide {
+    margin-top: 2em;
+}
+.footer-actions {
+    text-align: right;
+    padding-left: 0;
+}
+.test-enviroment #main-navbar {
+    background: rgb(124, 218, 104);
+}

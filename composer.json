@@ -1,0 +1,24 @@
+{
+    "name": "rutorika/dashboard",
+    "description": "Laravel dashboard package",
+    "authors": [
+        {
+            "name": "Dmitry Groza",
+            "email": "boxfrommars@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/support": "4.2.*",
+        "intervention/image": "2.*"
+    },
+    "autoload": {
+        "classmap": [
+            "src/migrations"
+        ],
+        "psr-0": {
+            "Rutorika\\Dashboard\\": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
