@@ -44,11 +44,6 @@ $.ajaxSetup({
     }
 });
 
-//$.fn.datetimepicker.defaults = {
-//    language: 'ru',
-//    showToday: true
-//};
-
 
 /**
  *
@@ -220,7 +215,17 @@ $(document).ready(function(){
     });
 
     $('.js-date-field').datetimepicker({
-        pickTime: false
+        pickTime: false,
+        language: 'ru'
+    });
+
+    $('.js-datetime-field').datetimepicker({
+        language: 'ru'
+    });
+
+    $('.js-time-field').datetimepicker({
+        pickDate: false,
+        language: 'ru'
     });
 });
 
