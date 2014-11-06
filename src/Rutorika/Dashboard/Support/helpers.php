@@ -55,6 +55,56 @@ if (!function_exists('add_link')) {
     }
 }
 
+if (!function_exists('plural_ru')) {
+    /**
+     * @param int $n
+     * @param str $form1 форма использующаяся в словосочетании с числительным 1 (1 яблоко, 1 квартира)
+     * @param str $form2 форма использующаяся в словосочетании с числительным 2 (2 яблока, 2 квартиры)
+     * @param str $form5 форма использующаяся в словосочетании с числительным 5 (5 яблок, 5 квартир)
+     * @return str
+     */
+    function plural_ru($n, $form1, $form2, $form5) {
+        $n = abs($n) % 100;
+        $n1 = $n % 10;
+
+        if ($n > 10 && $n < 20) {
+            return $form5;
+        } elseif ($n1 > 1 && $n1 < 5) {
+            return $form2;
+        } elseif ($n1 == 1) {
+            return $form1;
+        } else {
+            return $form5;
+        }
+    }
+}
+
+if (!function_exists('image_src')) {
+    function image_src($filename, $type) {
+        return "/assets/image/{$type}/{$filename}";
+    }
+}
+if (!function_exists('file_src')) {
+    function file_src($filename, $type) {
+        return "/assets/file/{$type}/{$filename}";
+    }
+}
+if (!function_exists('human_filesize')) {
+    function human_filesize($bytes, $decimals = 2) {
+        $size = ['B','kB','MB','GB','TB','PB','EB','ZB','YB'];
+        $factor = floor((strlen($bytes) - 1) / 3);
+        return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . ' ' . @$size[$factor];
+    }
+}
+if (!function_exists('mb_ucfirst')) {
+    function mb_ucfirst($string, $encoding) {
+        $strlen = mb_strlen($string, $encoding);
+        $firstChar = mb_substr($string, 0, 1, $encoding);
+        $then = mb_substr($string, 1, $strlen - 1, $encoding);
+        return mb_strtoupper($firstChar, $encoding) . $then;
+    }
+}
+
 
 if (!function_exists('generate_crud_routes')) {
     function generate_crud_routes($routes, $entityDefaultNameSpace = '\\')
