@@ -124,7 +124,7 @@ class FormBuilder extends IlluminateFormBuilder
     public function uploadField($uploadType = 'image', $name, $value = null, $fieldOptions, $options)
     {
         $type = $options['type'];
-
+        $value = $value === null ? $this->getValueAttribute($name) : $value;
         $src = $value ? "/assets/{$uploadType}/{$type}/{$value}" : null;
         $uploadUrl = isset($options['url']) ? $options['url'] : '/upload';
         $fieldOptions = $this->_appendClassToOptions('hidden uploader-input', $fieldOptions);
