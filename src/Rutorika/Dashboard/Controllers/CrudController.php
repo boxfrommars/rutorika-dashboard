@@ -169,6 +169,11 @@ class CrudController extends BaseController
         return \Input::all();
     }
 
+    /**
+     * @param array $input
+     * @param string $action update|create
+     * @return \Illuminate\Validation\Validator
+     */
     protected function _getValidator($input, $action = 'update')
     {
         $rulesName = '_' . $action . 'Rules';
@@ -177,8 +182,8 @@ class CrudController extends BaseController
         // заменяем в рулзах строки вида %id% на соответствующие значения $input ($input['id'])
         $rules = array_map(function($rule) use ($input) {
             return str_replace(
-                array_map(function($key){ return "%{$key}%"; }, array_keys($input)),
-                array_values($input),
+                array_map(function($key){ return "%{$key}%"; }, array_keys($input)), // обрамляем ключи знаками процента
+                array_dot(array_values($input)), // если значение было multidimensional vfccbdjv, превращаем в плоский с точка-нотацией
                 $rule
             );
         }, $rules);
