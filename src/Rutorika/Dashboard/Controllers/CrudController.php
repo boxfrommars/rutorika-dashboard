@@ -76,15 +76,14 @@ class CrudController extends BaseController
     }
 
     /**
-     * @param null $id
+     * @param null|int $id
      * @return $this|\Illuminate\Http\RedirectResponse
      */
     public function store($id = null)
     {
-        $rules = $this->_rules;
+        $action = $id === null ? 'create' : 'update';
         $input = $this->_getInput();
-
-        $validator = \Validator::make($input, $rules);
+        $validator = $this->_getValidator($input, $action);
 
         if ($validator->fails()) {
             \Flash::error('Проверьте правильность введённых данных');
@@ -165,6 +164,23 @@ class CrudController extends BaseController
     protected function _getInput()
     {
         return \Input::all();
+    }
+
+    protected function _getValidator($input, $action = 'update')
+    {
+        $rulesName = '_' . $action . 'Rules';
+        $rules = $this->$rulesName !== null ? $this->$rulesName : $this->_rules;
+
+        // заменяем в рулзах строки вида %id% на соответствующие значения $input ($input['id'])
+        $rules = array_map(function($rule) use ($input) {
+            return str_replace(
+                array_map(function($key){ return "%{$key}%"; }, array_keys($input)),
+                array_values($input),
+                $rule
+            );
+        }, $rules);
+
+        return \Validator::make($input, $rules);
     }
 
     /**
