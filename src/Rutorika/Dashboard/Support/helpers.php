@@ -41,8 +41,7 @@ if (!function_exists('grid_link')) {
 
         $linkHtml = $icon ? '<span class="glyphicon glyphicon-' . $icon . '"></span>' : $action;
 
-        return '<a data-action="' . $action . '" href="' . route(".{$name}.{$action}",
-            $routeParams) . '">' . $linkHtml . '</a>';
+        return '<a data-action="' . $action . '" href="' . route(".{$name}.{$action}", $routeParams) . '">' . $linkHtml . '</a>';
     }
 }
 
@@ -124,7 +123,7 @@ if (!function_exists('generate_crud_routes')) {
             Route::get( "{$prefix}{$name}/create",              ["as" => ".{$name}.create",    "uses" => "{$controller}@create"]);
             Route::post("{$name}/store",                        ["as" => ".{$name}.store",     "uses" => "{$controller}@store"]);
             Route::post("{$name}/{id}/update",                  ["as" => ".{$name}.update",    "uses" => "{$controller}@store"]);
-            Route::get( '{$name}/{' . $entity . '}/destroy',    ["as" => ".{$name}.destroy",   "uses" => "{$controller}@destroy"]);
+            Route::get( "{$name}/{id}/destroy",                 ["as" => ".{$name}.destroy",   "uses" => "{$controller}@destroy"]);
         }
     }
 }

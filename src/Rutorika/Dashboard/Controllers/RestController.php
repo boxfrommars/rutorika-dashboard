@@ -9,15 +9,8 @@ use Rutorika\Dashboard\Entities\Entity;
  *
  * @package Rutorika\Dashboard\Controllers
  */
-class RestController extends BaseController
+class RestController extends AbstractCrudController
 {
-    protected $_entity;
-    protected $_name;
-    protected $_parentName; // entity parent name
-    protected $_rules = []; // entity validation rules
-
-    public function __construct(){}
-
     public function index($parentEntity = null)
     {
         return $this->_getEntities($parentEntity);
@@ -34,10 +27,10 @@ class RestController extends BaseController
      */
     public function store($id = null)
     {
-        $rules = $this->_rules;
+        $action = $id === null ? 'create' : 'update';
         $input = $this->_getInput();
 
-        $validator = \Validator::make($input, $rules);
+        $validator = $this->_getValidator($input, $action, $id);
 
         if ($validator->fails()) {
             return \Response::json(['success' => false, 'errors' => $validator->errors()], 422);
@@ -64,59 +57,12 @@ class RestController extends BaseController
     }
 
     /**
-     * атрибут сущности указывающий на родителя, например `book_id`
+     * create form view
      *
-     * @return string
+     * @param Entity|null $parentEntity
      */
-    protected function _getParentAttribute()
+    public function create($parentEntity = null)
     {
-        return $this->_parentName . '_id';
+        // TODO: Implement create() method.
     }
-
-    /**
-     * @return array
-     */
-    protected function _getInput()
-    {
-        return \Input::all();
-    }
-
-    /**
-     * Получаем новую сущность, если id === null или уще имеющуюся в другом случае
-     *
-     * @param null|int $id
-     * @return Entity
-     */
-    protected function _getEntity($id = null)
-    {
-        /** @var Entity $entityClass */
-        $entityClass = $this->_getEntityClass();
-        return $id !== null ? $entityClass::findOrFail($id) : new $entityClass;
-    }
-
-    /**
-     * @param Entity $parentEntity
-     * @return $this|\Illuminate\Database\Eloquent\Collection|static[]
-     */
-    protected function _getEntities($parentEntity = null)
-    {
-        $entityClass = $this->_getEntityClass();
-        $parentAttribute = $this->_getParentAttribute();
-
-        return $parentEntity === null ? $entityClass::all() : $entityClass::where($parentAttribute, $parentEntity->id);
-    }
-
-    /**
-     * @return Entity
-     */
-    protected function _getEntityClass()
-    {
-        return $this->_entity;
-    }
-
-    /**
-     * @param Entity $entity
-     * @param array $input
-     */
-    protected function _onEntitySaved($entity, $input = []) {}
 }

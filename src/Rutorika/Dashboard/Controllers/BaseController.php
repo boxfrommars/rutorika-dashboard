@@ -16,8 +16,8 @@ class BaseController extends \Controller
         $this->layout = \View::make($this->layoutName);
     }
 
-    protected function _populateView($viewName, $viewParams)
+    protected function _populateView($viewName, $viewParams, $section = 'content')
     {
-        $this->layout->nest('content', $viewName, $viewParams);
+        $this->layout->nest($section, $viewName, $viewParams);
     }
 }

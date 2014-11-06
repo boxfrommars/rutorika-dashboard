@@ -11,34 +11,22 @@ use Rutorika\Dashboard\Entities\Entity;
  *
  * @package Rutorika\Dashboard\Controllers
  */
-class CrudController extends BaseController
+class CrudController extends AbstractCrudController
 {
-    protected $_entity;
-    protected $_name;
-    protected $_parentName; // entity parent name
-    protected $_rules = []; // entity validation rules
-    protected $_createRules = null;
-    protected $_updateRules = null;
-
     protected $_afterSaveRoute = 'self'; // 'self' (default) | 'index' | 'parent'
     protected $_afterDeleteRoute = 'parent'; // 'parent' (default) | 'index'
 
     protected $_viewPath = 'dashboard';
-
-    public function __construct(){}
-
     /**
      * @param Entity|null $parentEntity
      */
     public function index($parentEntity = null)
     {
-        $entityClass = $this->_getEntityClass();
-        $parentProperty = $this->_getParentProperty();
         $entitiesName = str_plural(camel_case($this->_name)); // множественное число имени сущностей (напр. `articles`)
 
-        $entities = $parentEntity === null ? $entityClass::all() : $entityClass::where($parentProperty, $parentEntity->id);
-
-        $viewParams = [$entitiesName => $entities];
+        $viewParams = [
+            $entitiesName => $this->_getEntities($parentEntity)
+        ];
 
         $this->_populateIndexView($viewParams);
     }
@@ -86,6 +74,7 @@ class CrudController extends BaseController
     {
         $action = $id === null ? 'create' : 'update';
         $input = $this->_getInput();
+
         $validator = $this->_getValidator($input, $action, $id);
 
         if ($validator->fails()) {
@@ -104,11 +93,13 @@ class CrudController extends BaseController
     }
 
     /**
-     * @param Entity $entity
+     * @param int $id
      * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
      */
-    public function destroy($entity)
+    public function destroy($id)
     {
+        $entity = $this->_getEntity($id);
         $entity->delete();
         \Flash::success('Удалено');
 
@@ -119,28 +110,6 @@ class CrudController extends BaseController
         } else {
             return $this->_redirectTo('index');
         }
-    }
-
-    /**
-     * Устанавливаем в сущность родительскую сущность, например $entity->book_id = $book->id
-     *
-     * @param Entity $entity
-     * @param Entity $parentEntity
-     */
-    protected function _setParent($entity, $parentEntity)
-    {
-        $parentProperty = $this->_getParentProperty();
-        $entity->$parentProperty = $parentEntity->id;
-    }
-
-    /**
-     * атрибут сущности указывающий на родителя, например `book_id`
-     *
-     * @return string
-     */
-    protected function _getParentProperty()
-    {
-        return $this->_parentName . '_id';
     }
 
     /**
@@ -159,61 +128,6 @@ class CrudController extends BaseController
     {
         $viewParams['name'] = $this->_name;
         $this->_populateView("{$this->_viewPath}.{$this->_name}.index", $viewParams);
-    }
-
-    /**
-     * @return array
-     */
-    protected function _getInput()
-    {
-        return \Input::all();
-    }
-
-    /**
-     * @param array $input
-     * @param string $action update|create
-     * @param null $id
-     * @return \Illuminate\Validation\Validator
-     */
-    protected function _getValidator($input, $action = 'update', $id = null)
-    {
-        $rulesName = '_' . $action . 'Rules';
-        $rules = $this->$rulesName !== null ? $this->$rulesName : $this->_rules;
-
-
-
-        // заменяем в рулзах строки вида %code% на соответствующие значения $input ($input['code'])
-        $replacer = array_merge($input, ['id' => $id]);
-        $rules = array_map(function($rule) use ($replacer) {
-            return str_replace(
-                array_map(function($key){ return "%{$key}%"; }, array_keys($replacer)), // обрамляем ключи знаками процента
-                array_dot(array_values($replacer)), // если значение было multidimensional vfccbdjv, превращаем в плоский с точка-нотацией
-                $rule
-            );
-        }, $rules);
-
-        return \Validator::make($input, $rules);
-    }
-
-    /**
-     * Получаем новую сущность, если id === null или уще имеющуюся в другом случае
-     *
-     * @param null|int $id
-     * @return Entity
-     */
-    protected function _getEntity($id = null)
-    {
-        /** @var Entity $entityClass */
-        $entityClass = $this->_getEntityClass();
-        return $id !== null ? $entityClass::findOrFail($id) : new $entityClass;
-    }
-
-    /**
-     * @return Entity
-     */
-    protected function _getEntityClass()
-    {
-        return $this->_entity;
     }
 
     /**
@@ -251,10 +165,4 @@ class CrudController extends BaseController
                 break;
         }
     }
-
-    /**
-     * @param Entity $entity
-     * @param array $input
-     */
-    protected function _onEntitySaved($entity, $input = []) {}
 }
