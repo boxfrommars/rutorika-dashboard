@@ -17,6 +17,9 @@ class CrudController extends BaseController
     protected $_name;
     protected $_parentName; // entity parent name
     protected $_rules = []; // entity validation rules
+    protected $_createRules = null;
+    protected $_updateRules = null;
+
     protected $_afterSaveRoute = 'self'; // 'self' (default) | 'index' | 'parent'
     protected $_afterDeleteRoute = 'parent'; // 'parent' (default) | 'index'
 
