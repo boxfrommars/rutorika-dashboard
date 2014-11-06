@@ -86,7 +86,7 @@ class CrudController extends BaseController
     {
         $action = $id === null ? 'create' : 'update';
         $input = $this->_getInput();
-        $validator = $this->_getValidator($input, $action);
+        $validator = $this->_getValidator($input, $action, $id);
 
         if ($validator->fails()) {
             \Flash::error('Проверьте правильность введённых данных');
@@ -172,18 +172,22 @@ class CrudController extends BaseController
     /**
      * @param array $input
      * @param string $action update|create
+     * @param null $id
      * @return \Illuminate\Validation\Validator
      */
-    protected function _getValidator($input, $action = 'update')
+    protected function _getValidator($input, $action = 'update', $id = null)
     {
         $rulesName = '_' . $action . 'Rules';
         $rules = $this->$rulesName !== null ? $this->$rulesName : $this->_rules;
 
-        // заменяем в рулзах строки вида %id% на соответствующие значения $input ($input['id'])
-        $rules = array_map(function($rule) use ($input) {
+
+
+        // заменяем в рулзах строки вида %code% на соответствующие значения $input ($input['code'])
+        $replacer = array_merge($input, ['id' => $id]);
+        $rules = array_map(function($rule) use ($replacer) {
             return str_replace(
-                array_map(function($key){ return "%{$key}%"; }, array_keys($input)), // обрамляем ключи знаками процента
-                array_dot(array_values($input)), // если значение было multidimensional vfccbdjv, превращаем в плоский с точка-нотацией
+                array_map(function($key){ return "%{$key}%"; }, array_keys($replacer)), // обрамляем ключи знаками процента
+                array_dot(array_values($replacer)), // если значение было multidimensional vfccbdjv, превращаем в плоский с точка-нотацией
                 $rule
             );
         }, $rules);
