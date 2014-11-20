@@ -19,6 +19,7 @@ abstract class AbstractCrudController extends BaseController
     protected $_rules = []; // entity validation rules
     protected $_createRules = null;
     protected $_updateRules = null;
+    protected $_perPage = null;
 
     /**
      * @param Entity|null $parentEntity
@@ -129,7 +130,13 @@ abstract class AbstractCrudController extends BaseController
         $entityClass = $this->_getEntityClass();
         $parentAttribute = $this->_getParentProperty();
 
-        return $parentEntity === null ? $entityClass::all() : $entityClass::where($parentAttribute, $parentEntity->id);
+        $query = $parentEntity === null ? $entityClass::query() : $entityClass::where($parentAttribute, $parentEntity->id);
+
+        if ($this->_perPage) {
+            return $query->paginate($this->_perPage);
+        } else {
+            return $query->get();
+        }
     }
 
     /**
