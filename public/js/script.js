@@ -229,6 +229,7 @@ $(document).ready(function(){
     });
 });
 
+// uploader init
 (function($){
     $(document).ready(function(){
         $('.js-uploader').each(function(){
@@ -282,5 +283,48 @@ $(document).ready(function(){
             .on('removed', function(){
                 $(this).find('.upload-result').text('');
             });
+    });
+})(jQuery);
+
+// select2 init
+(function($){
+    $(document).ready(function(){
+        var asyncSelect2Options = {
+            ajax: {
+                dataType: 'json',
+                quietMillis: 250,
+                results: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                data: function (term) {
+                    return {
+                        term: term
+                    };
+                },
+                cache: true
+            },
+            initSelection: function(element, callback) {
+                var id = $(element).val();
+                var baseUrl = $(element).data('ajax-url');
+                var isMultiple = $(element).data('multiple');
+
+                if (id !== '') {
+                    $.ajax(baseUrl + '/init', {
+                        dataType: "json",
+                        data: {
+                            id: id,
+                            multiple: isMultiple
+                        }
+                    }).done(callback);
+                }
+            }
+        };
+
+        $('.select2').select2();
+
+        $('.select2async[data-multiple!="1"]').select2(asyncSelect2Options);
+        $('.select2async[data-multiple="1"]').select2(_.defaults(asyncSelect2Options, {multiple: true}));
     });
 })(jQuery);

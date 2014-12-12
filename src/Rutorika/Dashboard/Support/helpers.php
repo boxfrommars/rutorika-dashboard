@@ -104,7 +104,6 @@ if (!function_exists('mb_ucfirst')) {
     }
 }
 
-
 if (!function_exists('generate_crud_routes')) {
     function generate_crud_routes($routes, $entityDefaultNameSpace = '\\')
     {
@@ -124,6 +123,18 @@ if (!function_exists('generate_crud_routes')) {
             Route::post("{$name}/store",                        ["as" => ".{$name}.store",     "uses" => "{$controller}@store"]);
             Route::post("{$name}/{id}/update",                  ["as" => ".{$name}.update",    "uses" => "{$controller}@store"]);
             Route::get( "{$name}/{id}/destroy",                 ["as" => ".{$name}.destroy",   "uses" => "{$controller}@destroy"]);
+        }
+    }
+}
+
+if (!function_exists('generate_select2_routes')) {
+    function generate_select2_routes($routes) {
+        foreach ($routes as $route) {
+            $name = $route['name'];
+            $controller = studly_case($name) . 'Controller';
+
+            Route::get("{$name}/select2",      ["as" => ".{$name}.select2",      "uses" => "{$controller}@select2search"]);
+            Route::get("{$name}/select2/init", ["as" => ".{$name}.select2.init", "uses" => "{$controller}@select2searchInit"]);
         }
     }
 }

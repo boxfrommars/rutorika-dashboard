@@ -18,6 +18,8 @@
     <link rel="stylesheet" href="/packages/rutorika/dashboard/vendor/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" />
     <link rel="stylesheet" href="/packages/rutorika/dashboard/vendor/jquery-file-upload/css/jquery.fileupload.css">
     <link rel="stylesheet" href="/packages/rutorika/dashboard/vendor/magnific-popup/magnific-popup.css">
+    <link rel="stylesheet" href="/packages/rutorika/dashboard/vendor/select2/select2.css">
+    <link rel="stylesheet" href="/packages/rutorika/dashboard/vendor/select2-bootstrap.css">
 
     <link rel="stylesheet" href="/packages/rutorika/dashboard/css/dashboard.css" />
 
@@ -81,6 +83,7 @@
     <script src="/packages/rutorika/dashboard/vendor/jquery-file-upload/js/jquery.iframe-transport.js"></script>
     <script src="/packages/rutorika/dashboard/vendor/jquery-file-upload/js/jquery.fileupload.js"></script>
     <script src="/packages/rutorika/dashboard/vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+    <script src="/packages/rutorika/dashboard/vendor/select2/select2.js"></script>
 
     <script src="http://api-maps.yandex.ru/2.1/?lang=ru_RU"></script>
 

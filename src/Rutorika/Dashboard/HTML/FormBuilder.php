@@ -30,6 +30,22 @@ class FormBuilder extends IlluminateFormBuilder
      * @param array $options
      * @return string
      */
+    public function hiddenField($title, $name, $value = null, $fieldOptions = [], $options = [])
+    {
+        $fieldOptions = $this->formFieldDefaultOptions($name, $fieldOptions);
+        $field = $this->hidden($name, $value, $fieldOptions);
+
+        return $this->formRow($title, $name, $field, $options);
+    }
+
+    /**
+     * @param string $title
+     * @param string $name
+     * @param mixed $value
+     * @param array $fieldOptions
+     * @param array $options
+     * @return string
+     */
     public function textareaField($title, $name, $value = null, $fieldOptions = [], $options = [])
     {
         $fieldOptions = array_merge(['rows' => 4], $this->formFieldDefaultOptions($name, $fieldOptions));
@@ -127,7 +143,7 @@ class FormBuilder extends IlluminateFormBuilder
         $value = $value === null ? $this->getValueAttribute($name) : $value;
         $src = $value ? "/assets/{$uploadType}/{$type}/{$value}" : null;
         $uploadUrl = isset($options['url']) ? $options['url'] : '/upload';
-        $fieldOptions = $this->_appendClassToOptions('hidden uploader-input', $fieldOptions);
+        $fieldOptions = $this->appendClassToOptions('hidden uploader-input', $fieldOptions);
 
         $uploadResultHtml = $uploadType === 'image' ? '<img class="media-object" src="' . $src . '" />' : $value;
 
@@ -145,6 +161,33 @@ class FormBuilder extends IlluminateFormBuilder
                         <a href="#" class="btn btn-default btn-xs js-upload-remove" title="Удалить"><i class="glyphicon glyphicon-remove"></i></a>
                     </div>
                 </div>';
+    }
+
+    public function select2Field($title, $name, $list = [], $selected = null, $fieldOptions = [], $options = [])
+    {
+        $options = array_merge(['multiple' => false, 'async' => false], $options);
+
+        $fieldOptions = $this->formFieldDefaultOptions($name, (array) $fieldOptions);
+
+        $async = $options['async'];
+        $isMultiple = $options['multiple'];
+
+        if ($async) {
+            $fieldOptions = $this->appendClassToOptions('select2async', $fieldOptions);
+            $value = implode(',', (array) $selected);
+            $url = route(".{$async}.select2");
+            $fieldOptions = array_merge(['data-ajax-url' => $url], $fieldOptions);
+            $fieldOptions['data-multiple'] = $isMultiple;
+            $field = $this->hidden($name, $value, $fieldOptions);
+        } else {
+            $fieldOptions = $this->appendClassToOptions('select2', $fieldOptions);
+            if ($isMultiple) {
+                $fieldOptions[] = 'multiple';
+            }
+            $field = $this->select($name, $list, $selected, $fieldOptions);
+        }
+
+        return $this->formRow($title, $name, $field, $options);
     }
 
     public function dateField($title, $name, $value = null, $fieldOptions = [], $options = [])
@@ -270,12 +313,12 @@ class FormBuilder extends IlluminateFormBuilder
      */
     public function formFieldDefaultOptions($name, $options)
     {
-        $options = $this->_appendClassToOptions('form-control', $options);
+        $options = $this->appendClassToOptions('form-control', $options);
 
         if (isset($this->session)) {
             $errors = $this->session->get('errors');
             if ($errors && $errors->first($name)) {
-                $options = $this->_appendClassToOptions('has-error', $options);
+                $options = $this->appendClassToOptions('has-error', $options);
             }
         }
 
@@ -284,12 +327,12 @@ class FormBuilder extends IlluminateFormBuilder
 
     public function color($name, $value = null, $options = [])
     {
-        $options = $this->_appendClassToOptions('js-color-field', $options);
+        $options = $this->appendClassToOptions('js-color-field', $options);
 
         return $this->text($name, $value, $options);
     }
 
-    protected function _appendClassToOptions($class, array $options = [])
+    public function appendClassToOptions($class, array $options = [])
     {
         $options['class'] = isset($options['class']) ? $options['class'] . ' ' : '';
         $options['class'] .= $class;
