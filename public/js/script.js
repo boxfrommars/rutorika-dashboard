@@ -214,6 +214,8 @@ $(document).ready(function(){
         }
     });
 
+    $('[maxlength]').maxlength();
+
     $('.js-date-field').datetimepicker({
         pickTime: false,
         language: 'ru'

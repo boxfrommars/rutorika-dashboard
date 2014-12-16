@@ -84,6 +84,7 @@
     <script src="/packages/rutorika/dashboard/vendor/jquery-file-upload/js/jquery.fileupload.js"></script>
     <script src="/packages/rutorika/dashboard/vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
     <script src="/packages/rutorika/dashboard/vendor/select2/select2.js"></script>
+    <script src="/packages/rutorika/dashboard/vendor/bootstrap-maxlength.js"></script>
 
     <script src="http://api-maps.yandex.ru/2.1/?lang=ru_RU"></script>
 
