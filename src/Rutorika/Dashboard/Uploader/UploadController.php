@@ -7,7 +7,6 @@ class UploadController extends \Controller
     public function handle()
     {
         $config = \Config::get('dashboard::uploader.types');
-        \Log::debug($config);
 
         $typeName = \Input::has('type') ? \Input::get('type') : 'default';
         $typeConfig = app_array_find_where($config, 'name', $typeName);
@@ -16,7 +15,7 @@ class UploadController extends \Controller
             \App::abort(422, "type {$typeName} not found");
         }
 
-        $file = \Input::file("file");
+        $file = \Input::file('file');
 
         $validator = \Validator::make(['file' => $file], ['file' => $typeConfig['rules']]);
 
