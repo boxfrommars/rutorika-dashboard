@@ -27,7 +27,7 @@ class UploadController extends \Controller
                 case 'file':
                     $path = array_get($typeConfig, 'location.path');
                     $destinationPath = public_path() . $path;
-                    $filename = uniqid() . '_' . $file->getClientOriginalName();
+                    $filename = md5(uniqid() . '_' . $file->getClientOriginalName()) . $file->getClientOriginalExtension();
                     $file->move($destinationPath, $filename);
 
                     return \Response::json(['success' => true, 'path' => asset($path . $filename), 'filename' => $filename]);
