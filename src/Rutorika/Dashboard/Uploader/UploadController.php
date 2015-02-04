@@ -29,9 +29,15 @@ class UploadController extends \Controller
                     $destinationPath = public_path() . $path;
 
                     $filename = $this->generateFilename($file);
-                    $file->move($destinationPath, $filename);
 
-                    return \Response::json(['success' => true, 'path' => asset($path . $filename), 'filename' => $filename]);
+                    $splittedFilename = str_split($filename, 2);
+
+                    $subpath = implode('/', array_slice($splittedFilename, 0, 2));
+                    $filename = implode('', array_slice($splittedFilename, 2));
+
+                    $file->move($destinationPath . '/' . $subpath, $filename);
+
+                    return \Response::json(['success' => true, 'path' => asset($path . $subpath . '/' . $filename), 'filename' => $subpath . '/' . $filename]);
                     break;
                 default:
                     return \Response::json(['success' => false, 'errors' => ['location type required']]);
