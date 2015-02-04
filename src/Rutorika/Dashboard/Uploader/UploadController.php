@@ -27,7 +27,8 @@ class UploadController extends \Controller
                 case 'file':
                     $path = array_get($typeConfig, 'location.path');
                     $destinationPath = public_path() . $path;
-                    $filename = md5(uniqid() . '_' . $file->getClientOriginalName()) . $file->getClientOriginalExtension();
+
+                    $filename = $this->generateFilename($file);
                     $file->move($destinationPath, $filename);
 
                     return \Response::json(['success' => true, 'path' => asset($path . $filename), 'filename' => $filename]);
@@ -37,5 +38,18 @@ class UploadController extends \Controller
                     break;
             }
         }
+    }
+
+    /**
+     * @param \Symfony\Component\HttpFoundation\File\UploadedFile|array $file
+     * @return string
+     */
+    public function generateFilename($file)
+    {
+        $filename = md5(uniqid() . '_' . $file->getClientOriginalName());
+        $extension = $file->getClientOriginalExtension();
+        $filename = $extension ? $filename . '.' . $extension : $filename;
+
+        return $filename;
     }
 }
