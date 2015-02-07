@@ -26,18 +26,13 @@ class UploadController extends \Controller
             switch (array_get($typeConfig, 'location.type')) {
                 case 'file':
                     $path = array_get($typeConfig, 'location.path');
-                    $destinationPath = public_path() . $path;
 
-                    $filename = $this->generateFilename($file);
+                    $filename = static::generateFilename($file);
+                    $fileDestinationInfo = static::getDestinationInfo($filename, $path);
 
-                    $splittedFilename = str_split($filename, 2);
+                    $file->move($fileDestinationInfo['destination'], $fileDestinationInfo['filename']);
 
-                    $subpath = implode('/', array_slice($splittedFilename, 0, 2));
-                    $filename = implode('', array_slice($splittedFilename, 2));
-
-                    $file->move($destinationPath . '/' . $subpath, $filename);
-
-                    return \Response::json(['success' => true, 'path' => asset($path . $subpath . '/' . $filename), 'filename' => $subpath . '/' . $filename]);
+                    return \Response::json(['success' => true, 'path' => $fileDestinationInfo['public_destination'], 'filename' => $fileDestinationInfo['assets_destination']]);
                     break;
                 default:
                     return \Response::json(['success' => false, 'errors' => ['location type required']]);
@@ -50,12 +45,28 @@ class UploadController extends \Controller
      * @param \Symfony\Component\HttpFoundation\File\UploadedFile|array $file
      * @return string
      */
-    public function generateFilename($file)
+    public static function generateFilename($file)
     {
         $filename = md5(uniqid() . '_' . $file->getClientOriginalName());
         $extension = $file->getClientOriginalExtension();
         $filename = $extension ? $filename . '.' . $extension : $filename;
 
         return $filename;
+    }
+
+    public static function getDestinationInfo($filename, $path)
+    {
+
+        $splittedFilename = str_split($filename, 2);
+
+        $subpath = implode('/', array_slice($splittedFilename, 0, 2));
+        $filename = implode('', array_slice($splittedFilename, 2));
+
+        return [
+            'destination' => public_path() . $path . $subpath,
+            'filename' => $filename,
+            'public_destination' => $path . $subpath . '/' . $filename,
+            'assets_destination' => $subpath . '/' . $filename
+        ];
     }
 }
