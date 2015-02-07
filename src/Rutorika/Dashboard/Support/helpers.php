@@ -79,7 +79,7 @@ if (!function_exists('plural_ru')) {
 }
 
 if (!function_exists('image_src')) {
-    function image_src($filename, $type) {
+    function image_src($filename, $type = 'default') {
         return "/assets/image/{$type}/{$filename}";
     }
 }
