@@ -191,7 +191,7 @@ class FormBuilder extends IlluminateFormBuilder
 
         $uploadResultHtml = '';
 
-        if ($uploadType === 'image') {
+        if ($uploadType === 'image' && $value) {
             $values = explode(':', $value);
             foreach ($values as $imageSrc) {
                 $uploadResultHtml .= '<div data-image="' . $imageSrc . '" class="thumbnail pull-left">
@@ -204,12 +204,12 @@ class FormBuilder extends IlluminateFormBuilder
         return '<div class="media upload-container upload-' . $uploadType . '-multiple-container">
                     <div class="row">
                         <div class="col-sm-1">
-                            <span class="btn btn-default btn-xs fileinput-button">
+                            <p><span class="btn btn-default btn-xs fileinput-button">
                                 <i class="glyphicon glyphicon-picture"></i>
                                 <i class="glyphicon glyphicon-list"></i>
                                 <span></span>
                                 <input type="file" class="js-uploader-multiple" multiple data-type="' . $type . '" data-url="' . $uploadUrl . '">
-                            </span>
+                            </span></p>
                         </div>
                     </div>
                     <div class="row">
