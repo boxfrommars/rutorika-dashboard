@@ -239,3 +239,8 @@ body {
 .test-enviroment #main-navbar {
     background: rgb(124, 218, 104);
 }
+
+.sortable-images .thumbnail {
+    margin-right: 20px;
+    position: relative;
+}

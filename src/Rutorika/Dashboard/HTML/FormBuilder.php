@@ -119,6 +119,16 @@ class FormBuilder extends IlluminateFormBuilder
         return $this->formRow($title, $name, $field, $options);
     }
 
+    public function imageMultipleField($title, $name, $value = null, $fieldOptions = [], $options = [])
+    {
+        $fieldOptions = $this->formFieldDefaultOptions($name, $fieldOptions);
+        $options = array_merge(['type' => 'default'], $options);
+
+        $field = $this->uploadMultipleField('image', $name, $value, $fieldOptions, $options);
+
+        return $this->formRow($title, $name, $field, $options);
+    }
+
     public function fileField($title, $name, $value = null, $fieldOptions = [], $options = [])
     {
         $fieldOptions = $this->formFieldDefaultOptions($name, $fieldOptions);
@@ -159,6 +169,56 @@ class FormBuilder extends IlluminateFormBuilder
                             <input type="file" class="js-uploader" data-type="' . $type . '" data-url="' . $uploadUrl . '">
                         </span>
                         <a href="#" class="btn btn-default btn-xs js-upload-remove" title="Удалить"><i class="glyphicon glyphicon-remove"></i></a>
+                    </div>
+                </div>';
+    }
+
+    /**
+     * @param string $uploadType image|file
+     * @param        $name
+     * @param null   $value
+     * @param        $fieldOptions
+     * @param array  $options
+     *
+     * @return string
+     */
+    public function uploadMultipleField($uploadType = 'image', $name, $value, $fieldOptions, $options)
+    {
+        $value = $value === null ? $this->getValueAttribute($name) : $value;
+        $type = $options['type'];
+        $uploadUrl = isset($options['url']) ? $options['url'] : '/upload';
+        $fieldOptions = $this->appendClassToOptions('hidden uploader-input', $fieldOptions);
+
+        $uploadResultHtml = '';
+
+        if ($uploadType === 'image') {
+            $values = explode(':', $value);
+            foreach ($values as $imageSrc) {
+                $uploadResultHtml .= '<div data-image="' . $imageSrc . '" class="thumbnail pull-left">
+                        <a href="' . image_src($imageSrc) . '" rel="gallery-image" class="thumb upload-result" style="background-image:url(' . image_src($imageSrc) . ')"></a>
+                        <a title="удалить" href="#" class="thumbnail-link thumbnail-image-destroy"><i class="glyphicon glyphicon-remove"></i></a>
+                    </div>';
+            }
+        }
+
+        return '<div class="media upload-container upload-' . $uploadType . '-multiple-container">
+                    <div class="row">
+                        <div class="col-sm-1">
+                            <span class="btn btn-default btn-xs fileinput-button">
+                                <i class="glyphicon glyphicon-picture"></i>
+                                <i class="glyphicon glyphicon-list"></i>
+                                <span></span>
+                                <input type="file" class="js-uploader-multiple" multiple data-type="' . $type . '" data-url="' . $uploadUrl . '">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="sortable-images">
+                                ' . $this->text($name, $value, $fieldOptions) . '
+                                ' . $uploadResultHtml . '
+                            </div>
+                        </div>
                     </div>
                 </div>';
     }
