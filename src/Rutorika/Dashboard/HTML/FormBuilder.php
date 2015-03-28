@@ -308,6 +308,20 @@ class FormBuilder extends IlluminateFormBuilder
     }
 
     /**
+     * @param $title
+     * @param $value
+     * @param array $options
+     * @return string
+     */
+    public function staticField ($title, $value, $options = [])
+    {
+        $name = 'static-' . uniqid();
+        $field = '<p class="form-control-static">' . $value . '</p>';
+
+        return $this->formRow($title, $name, $field, $options);
+    }
+
+    /**
      * @param string $title
      * @return string
      */
