@@ -13,8 +13,7 @@
         "intervention/image": "2.*"
     },
     "require-dev": {
-        "orchestra/testbench": "2.2.*",
-        "phpdocumentor/phpdocumentor": "2.*"
+        "orchestra/testbench": "2.2.*"
     },
     "autoload": {
         "classmap": [

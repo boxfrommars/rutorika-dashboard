@@ -27,6 +27,9 @@ class CrudController extends AbstractCrudController
         $viewParams = [
             $entitiesName => $this->_getEntities($parentEntity)
         ];
+        if ($this->_parentName) {
+            $viewParams[camel_case($this->_parentName)] = $parentEntity;
+        }
 
         $this->_populateIndexView($viewParams);
     }
